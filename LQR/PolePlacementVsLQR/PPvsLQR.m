@@ -26,28 +26,24 @@ xb = initial(sys2,[1 2 3]',t);   % System initial State
 figure('units','normalized','outerposition',[0 0 1 1],'color','w')
 
 subplot(3,2,1)
-plot(t(1:i),xa(1:i,1),'k','LineWidth',2),grid,hold on
-plot(t(1:i),xb(1:i,1),'r','LineWidth',2)
+plot(t,xa(:,1),'k','LineWidth',2),grid,hold on
+plot(t,xb(:,1),'r','LineWidth',2)
 ylabel('State X1'),xlabel('Time'),legend('Ackerman','LQR')
-axis([min(t) max(t) -1 3])
 
 subplot(3,2,3)
-plot(t(1:i),xa(1:i,2),'k','LineWidth',2),grid,hold on
-plot(t(1:i),xb(1:i,2),'r','LineWidth',2)
+plot(t,xa(:,2),'k','LineWidth',2),grid,hold on
+plot(t,xb(:,2),'r','LineWidth',2)
 ylabel('State X2'),xlabel('Time'),legend('Ackerman','LQR')
-axis([min(t) max(t) -3 3])
 
 
 subplot(3,2,5)
-plot(t(1:i),xa(1:i,3),'k','LineWidth',2),grid,hold on
-plot(t(1:i),xb(1:i,3),'r','LineWidth',2)
+plot(t,xa(:,3),'k','LineWidth',2),grid,hold on
+plot(t,xb(:,3),'r','LineWidth',2)
 ylabel('State X3'),xlabel('Time'),legend('Ackerman','LQR')
-axis([min(t) max(t) -18 10])
 
 
 subplot(3,2,[2,4,6])
-plot3(xa(1:i,1),xa(1:i,2),xa(1:i,3),'k','LineWidth',2),grid,hold on
-plot3(xb(1:i,1),xb(1:i,2),xb(1:i,3),'r','LineWidth',2)
+plot3(xa(:,1),xa(:,2),xa(:,3),'k','LineWidth',2),grid,hold on
+plot3(xb(:,1),xb(:,2),xb(:,3),'r','LineWidth',2)
 title('System Phase Space'),legend('Ackerman','LQR')
 xlabel('State X1'),ylabel('State X2'),zlabel('State X3')
-axis([-1 3 -3 3 -20 10])
