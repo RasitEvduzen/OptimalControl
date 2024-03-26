@@ -47,8 +47,9 @@ for k=1:1e2:length(t)
     pendx = x + L*sin(th);
     pendy = y - L*cos(th);
     % Plot Pendulum
-    clf    
-    subplot(3,2,[1,2])
+%     clf
+    
+    h1 = subplot(3,2,[1,2])
     plot([-10 10],[0 0],'k--','LineWidth',2), hold on
     rectangle('Position',[x-W/2,y-H/2,W,H],'Curvature',.1,'FaceColor',[0.4940 0.1840 0.5560],'LineWidth',1.5); % Draw cart
     rectangle('Position',[x-.9*W/2,0,wr,wr],'Curvature',1,'FaceColor',[1 1 0],'LineWidth',1.5);    % Draw wheel
@@ -67,6 +68,7 @@ for k=1:1e2:length(t)
 
     subplot(3,2,[5,6])
     PlotVecField(state)
+
     drawnow
 end
 
