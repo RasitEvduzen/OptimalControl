@@ -8,7 +8,7 @@ m = 5;   % pendulum mass
 M = 5;   % cart mass
 L = 2;   % pendulum length
 g = -9.81; % gravitational force
-d = .5;   % cart damping
+d = 0.5;   % cart damping
 b = 1;   % pendulum up (b=1)
 
 % Linear State Space Model
@@ -19,16 +19,22 @@ A = [0  1          0               0;
 B = [0; 1/M; 0; b*1/(M*L)];
 
 %  Design LQR controller
-Q = eye(length(A));
-R = 0.0001;
+Q = 1e2*eye(length(A));
+R = 1e-3;
 K = lqr(A,B,Q,R);
 
+Control = "On"; % Control (On - Off)
 
 % Simulate closed-loop system
 tspan = 0:2e-3:16;
-xini = [-6; 0; pi; 0];  % initial condition
+xini = [-6; 0; pi+1e-1; 0];  % initial condition
 Ref = [6; 0; pi; 0];       % reference position
-u  = @(x)-K*(x - Ref);     % control law
+
+if Control == "On"
+    u  = @(x)-K*(x - Ref);     % control law
+else
+    u = @(x) 0;      % Non Force Solution
+end
 [t,state] = ode45(@(t,x) PendStateSpace(x,m,M,L,g,d,u(x)),tspan,xini);  % Runge Kutta4 for Forward Dynamics Simulation
 
 
@@ -47,44 +53,32 @@ for k=1:1e2:length(t)
     pendx = x + L*sin(th);
     pendy = y - L*cos(th);
     % Plot Pendulum
-    clf    
-    subplot(3,2,[1,2])
-    plot([-10 10],[0 0],'k--','LineWidth',2), hold on
+    clf
+    subplot(2,2,[1,2])
+    yline(0,'k--','LineWidth',2), hold on
     rectangle('Position',[x-W/2,y-H/2,W,H],'Curvature',.1,'FaceColor',[0.4940 0.1840 0.5560],'LineWidth',1.5); % Draw cart
     rectangle('Position',[x-.9*W/2,0,wr,wr],'Curvature',1,'FaceColor',[1 1 0],'LineWidth',1.5);    % Draw wheel
     rectangle('Position',[x+.9*W/2-wr,0,wr,wr],'Curvature',1,'FaceColor',[1 1 0],'LineWidth',1.5); % Draw wheel
     plot([x pendx],[y pendy],'k','LineWidth',2); % Draw pendulum
     rectangle('Position',[pendx-mr/2,pendy-mr/2,mr,mr],'Curvature',1,'FaceColor',[1 0.1 .1],'LineWidth',1.5);
-    axis([-5 5 -1 3]);, axis equal,grid on
+    axis equal,axis([-12 12 -3 3]),grid on
     title('Inverted Pendulum LQR Based Control')
     xline(xini(1),'b'),xline(Ref(1),'b')
 
-    subplot(3,2,[3,4])
+    subplot(2,2,[3,4])
     plot(t,state,'LineWidth',2); hold on
     xline(t(k),'r')
     legend('x','v','\theta','\omega','time','Location','SouthEast');
     xlabel('Time'),ylabel('State'),grid on
 
-    subplot(3,2,[5,6])
-    PlotVecField(state)
     drawnow
 end
 
-function PlotVecField(state)
-VecField = @(t,Y) [Y(2); -sin(Y(1))];
-y1 = linspace(-2,8,20);
-y2 = linspace(-2,2,20);
-[x,y] = meshgrid(y1,y2);
-u = zeros(size(x));
-v = zeros(size(x));
-for i = 1:numel(x)
-    Yprime = VecField(0,[x(i); y(i)]);
-    u(i) = Yprime(1);
-    v(i) = Yprime(2);
-end
-quiver(x,y,u,v,'r');xlabel('y_1');ylabel('y_2'),axis tight equal,hold on
-plot(state(:,3),state(:,4),"b",LineWidth=3),title("Pendulum Phase Space")
-end
+figure('units','normalized','outerposition',[0 0 1 1],'color','w')
+subplot(121)
+plot(state(:,1),state(:,2),"b",LineWidth=3),title("Pendulum Phase Space"),grid
+subplot(122)
+plot(state(:,3),state(:,4),"b",LineWidth=3),title("Pendulum Phase Space"),grid
 
 function dx = PendStateSpace(x,m,M,L,g,d,u)
 D = m*L*L*(M+m*(1-cos(x(3))^2));
