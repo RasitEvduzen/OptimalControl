@@ -74,6 +74,7 @@ for k=1:1e2:length(t)
     drawnow
 end
 
+% Phase Space Plot
 figure('units','normalized','outerposition',[0 0 1 1],'color','w')
 subplot(121)
 plot(state(:,1),state(:,2),"b",LineWidth=3),title("Pendulum Phase Space"),grid
