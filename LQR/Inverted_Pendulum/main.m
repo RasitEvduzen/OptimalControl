@@ -83,7 +83,7 @@ for i = 1:numel(x)
     v(i) = Yprime(2);
 end
 quiver(x,y,u,v,'r');xlabel('y_1');ylabel('y_2'),axis tight equal,hold on
-plot(state(:,3),state(:,4),"b",LineWidth=3)
+plot(state(:,3),state(:,4),"b",LineWidth=3),title("Pendulum Phase Space")
 end
 
 function dx = PendStateSpace(x,m,M,L,g,d,u)
