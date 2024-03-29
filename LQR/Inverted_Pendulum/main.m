@@ -8,7 +8,7 @@ m = 5;   % pendulum mass
 M = 5;   % cart mass
 L = 2;   % pendulum length
 g = -9.81; % gravitational force
-d = 0.5;   % cart damping
+d = 10;   % cart damping
 b = 1;   % pendulum up (b=1)
 
 % Linear State Space Model
@@ -23,7 +23,7 @@ Q = 1e2*eye(length(A));
 R = 1e-3;
 K = lqr(A,B,Q,R);
 
-Control = "On"; % Control (On - Off)
+Control = "Off"; % Control (On - Off)
 
 % Simulate closed-loop system
 tspan = 0:2e-3:16;
