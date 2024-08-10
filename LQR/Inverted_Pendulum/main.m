@@ -23,7 +23,7 @@ Q = 1e2*eye(length(A));
 R = 1e-3;
 K = lqr(A,B,Q,R);
 
-Control = "Off"; % Control (On - Off)
+Control = "On"; % Control (On - Off)
 
 % Simulate closed-loop system
 tspan = 0:2e-3:16;
